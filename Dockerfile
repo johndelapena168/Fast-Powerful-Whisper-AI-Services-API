@@ -20,7 +20,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Pre-download the Whisper model (optional but recommended)
-RUN python -c "from faster_whisper import WhisperModel; WhisperModel('tiny.en', device='cpu')"
 
 EXPOSE 8000
 
