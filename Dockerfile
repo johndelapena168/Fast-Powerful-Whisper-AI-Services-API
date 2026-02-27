@@ -9,18 +9,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# ⭐ FIX: Upgrade pip + install setuptools FIRST
+# Upgrade pip + install setuptools FIRST (fixes pkg_resources issues)
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Copy and install Python dependencies
+# Copy requirements and install Python deps
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy app code
 COPY . .
 
-# Pre-download the Whisper model (optional but recommended)
-
+# Expose port
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]
