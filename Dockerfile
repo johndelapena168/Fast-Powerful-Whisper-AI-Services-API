@@ -9,6 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# ⭐ FIX: Upgrade pip + install setuptools FIRST
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
 # Copy and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -16,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Pre-download the Whisper model (avoids cold-start delays)
+# Pre-download the Whisper model (optional but recommended)
 RUN python -c "from faster_whisper import WhisperModel; WhisperModel('tiny.en', device='cpu')"
 
 EXPOSE 8000
